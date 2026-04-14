@@ -18,7 +18,7 @@ public class Bucket<TElemento>(int profundidade, int tamanho)
         QuantidadeDeElementos++;
     }
 
-    public TElemento Buscar(int chave)
+    public TElemento? Buscar(int chave)
     {
         var hash = chave % (int)Math.Pow(2, Profundidade);
         return Elementos[hash];
