@@ -2,4 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/HashTableExtensivel/HashTableExtensivel.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/HashTableExtensivel.Tests/HashTableExtensivel.Tests.csproj" />
+  </Folder>
 </Solution>
