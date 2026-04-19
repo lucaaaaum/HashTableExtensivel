@@ -72,4 +72,6 @@ public class Bucket<TElemento>(int profundidade, int tamanho)
 
         return novoBucket;
     }
+
+    public TElemento?[] ObterElementos() => Elementos;
 }

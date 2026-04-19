@@ -84,4 +84,6 @@ public class HashTable<TElemento>
         var json = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true, IncludeFields = true });
         Console.WriteLine(json);
     }
+
+    public Bucket<TElemento>[] ObterDiretório() => Diretório;
 }
