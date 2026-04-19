@@ -3,8 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace HashTableExtensivel.EstruturasDeDados;
 
-public class HashTable<TElemento>
-    where TElemento : IChaveável
+public class HashTable<TElemento> where TElemento : IChaveável
 {
     public int TamanhoDoBucket { get; init; }
     public int Profundidade { get; private set; }
@@ -22,9 +21,8 @@ public class HashTable<TElemento>
     public void Inserir(TElemento elemento)
     {
         var chave = elemento.ObterChave();
-        var hash = chave % (int)Math.Pow(2, Profundidade);
+        var hash = CalcularHash(chave);
 
-        Console.WriteLine($"Inserindo elemento com chave {chave} no bucket {hash}");
         var bucket = Diretório[hash];
 
         if (!bucket.Cheio)
@@ -64,9 +62,11 @@ public class HashTable<TElemento>
         Inserir(elemento);
     }
 
+    public int CalcularHash(int chave) => chave % (int)Math.Pow(2, Profundidade);
+
     public TElemento? Buscar(int chave)
     {
-        var hash = chave % (int)Math.Pow(2, Profundidade);
+        var hash = CalcularHash(chave);
         var bucket = Diretório[hash];
         Console.WriteLine($"Buscando elemento com chave {chave} no bucket {hash}");
         return bucket.Buscar(chave);
@@ -74,7 +74,7 @@ public class HashTable<TElemento>
 
     public void Remover(int chave)
     {
-        var hash = chave % (int)Math.Pow(2, Profundidade);
+        var hash = CalcularHash(chave);
         var bucket = Diretório[hash];
         bucket.Remover(chave);
     }
