@@ -99,5 +99,7 @@ public class Bucket<TChave, TElemento>(int profundidade, int tamanho)
         return novoBucket;
     }
 
+    public (TChave chave, TElemento elemento)?[] ObterChavesEElementos() => [.. Elementos];
+
     public TElemento?[] ObterElementos() => [.. Elementos.Select(e => e!.Value.elemento)];
 }

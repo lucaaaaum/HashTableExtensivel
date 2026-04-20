@@ -1,7 +1,6 @@
-using System.Text.Encodings.Web;
-using System.Text.Json;
 using HashTableExtensivel.Cli.Dtos;
 using HashTableExtensivel.EstruturasDeDados;
+using HashTableExtensivel.Json;
 using Spectre.Console.Cli;
 
 namespace HashTableExtensivel.Cli.Comandos;
@@ -20,13 +19,6 @@ public class AdicionarElementoSettings : CommandSettings
 
 public class AdicionarElementoCommand : Command<AdicionarElementoSettings>
 {
-    private readonly JsonSerializerOptions jsonSerializerOptions = new()
-    {
-        WriteIndented = true,
-        IncludeFields = true,
-        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-    };
-
     protected override int Execute(CommandContext context, AdicionarElementoSettings settings, CancellationToken cancellationToken)
     {
         var arquivo = Path.ChangeExtension(settings.Arquivo, "json") ?? settings.Arquivo;
@@ -37,67 +29,33 @@ public class AdicionarElementoCommand : Command<AdicionarElementoSettings>
             return 1;
         }
 
-        var tabelaComMetadados = JsonSerializer.Deserialize<TabelaComMetadados>(File.ReadAllText(arquivo));
+        if (string.IsNullOrWhiteSpace(settings.Chave))
+        {
+            Console.WriteLine("A chave não pode ser vazia. Por favor, forneça uma chave válida e tente novamente.");
+            return 1;
+        }
 
-        if (tabelaComMetadados is null)
+        if (string.IsNullOrWhiteSpace(settings.Elemento))
+        {
+            Console.WriteLine("O elemento não pode ser vazio. Por favor, forneça um elemento válido e tente novamente.");
+            return 1;
+        }
+
+        var tabelaDesconstruída = Serializador.Desserializar<TabelaDesconstruída>(File.ReadAllText(arquivo));
+        var tabela = new HashTable<string, string>(tabelaDesconstruída!.TamanhoDoBucket);
+        foreach (var item in tabelaDesconstruída.Chaves.Zip(tabelaDesconstruída.Elementos, (chave, elemento) => (chave, elemento)))
+            tabela.Inserir(item.chave, item.elemento);
+
+        if (tabela is null)
         {
             Console.WriteLine($"O arquivo '{arquivo}' não contém uma tabela válida. Por favor, verifique o conteúdo do arquivo e tente novamente.");
             return 1;
         }
 
-        var chaveInt = 0;
-        if (tabelaComMetadados.TipoDeChave is TipoDeDado.Int && !int.TryParse(settings.Chave, out chaveInt))
-        {
-            Console.WriteLine($"A chave '{settings.Chave}' não é um número inteiro válido. Por favor, verifique a chave e tente novamente.");
-            return 1;
-        }
+        tabela.Inserir(settings.Chave, settings.Elemento);
 
-        var elementoInt = 0;
-        if (tabelaComMetadados.TipoDeElemento is TipoDeDado.Int && !int.TryParse(settings.Elemento, out elementoInt))
-        {
-            Console.WriteLine($"O elemento '{settings.Elemento}' não é um número inteiro válido. Por favor, verifique o elemento e tente novamente.");
-            return 1;
-        }
-
-        if (tabelaComMetadados.TipoDeChave is TipoDeDado.String && string.IsNullOrWhiteSpace(settings.Chave))
-        {
-            Console.WriteLine($"A chave não pode ser nula. Por favor, verifique a chave e tente novamente.");
-            return 1;
-        }
-
-        if (tabelaComMetadados.TipoDeElemento is TipoDeDado.String && string.IsNullOrWhiteSpace(settings.Elemento))
-        {
-            Console.WriteLine($"O elemento não pode ser nulo. Por favor, verifique o elemento e tente novamente.");
-            return 1;
-        }
-
-        switch ((tabelaComMetadados.TipoDeChave, tabelaComMetadados.TipoDeElemento))
-        {
-            case (TipoDeDado.Int, TipoDeDado.Int):
-                var hashTableIntInt = JsonSerializer.Deserialize<HashTable<int, int>>(JsonSerializer.Serialize(tabelaComMetadados.Tabela, jsonSerializerOptions), jsonSerializerOptions);
-                hashTableIntInt!.Inserir(chaveInt, elementoInt);
-                break;
-            case (TipoDeDado.Int, TipoDeDado.String):
-                var hashTableIntString = JsonSerializer.Deserialize<HashTable<int, string>>(JsonSerializer.Serialize(tabelaComMetadados.Tabela, jsonSerializerOptions), jsonSerializerOptions);
-                hashTableIntString!.Inserir(chaveInt, settings.Elemento!);
-                break;
-            case (TipoDeDado.String, TipoDeDado.Int):
-                var hashTableStringInt = JsonSerializer.Deserialize<HashTable<string, int>>(JsonSerializer.Serialize(tabelaComMetadados.Tabela, jsonSerializerOptions), jsonSerializerOptions);
-                hashTableStringInt!.Inserir(settings.Chave!, elementoInt);
-                break;
-            case (TipoDeDado.String, TipoDeDado.String):
-                var hashTableStringString = JsonSerializer.Deserialize<HashTable<string, string>>(JsonSerializer.Serialize(tabelaComMetadados.Tabela, jsonSerializerOptions), jsonSerializerOptions);
-                hashTableStringString!.Inserir(settings.Chave!, settings.Elemento!);
-                break;
-        }
-
-        var tabelaComMetadadosAtualizada = new TabelaComMetadados
-        {
-            Tabela = tabelaComMetadados.Tabela,
-            TipoDeChave = tabelaComMetadados.TipoDeChave,
-            TipoDeElemento = tabelaComMetadados.TipoDeElemento
-        };
-        var json = JsonSerializer.Serialize(tabelaComMetadadosAtualizada, jsonSerializerOptions);
+        var tabelaDesconstruídaAtualizada = TabelaDesconstruída.Converter(tabela);
+        var json = Serializador.Serializar(tabelaDesconstruídaAtualizada);
 
         File.WriteAllText(arquivo, json);
 
