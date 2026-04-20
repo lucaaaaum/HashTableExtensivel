@@ -25,6 +25,10 @@ app.Configure(config =>
         .AddCommand<RemoverElementoCommand>("remover")
         .WithDescription("Remove um elemento de uma tabela hash extensível existente.")
         .WithExample(["remover", "-a", "minha_hash_table.json", "-c", "chave1"]);
+    config
+        .AddCommand<BuscarCommand>("buscar")
+        .WithDescription("Busca um elemento em uma tabela hash extensível existente.")
+        .WithExample(["buscar", "-a", "minha_hash_table.json", "-c", "chave1"]);
 });
 return app.Run(args);
 
