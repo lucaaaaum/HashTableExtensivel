@@ -16,8 +16,11 @@ public static class CalculadoraDeHash
         throw new InvalidOperationException("Tipo de chave não suportado para cálculo de hash.");
     }
 
-    private static int CalcularHash(int chave, int profundidade) =>
-        chave % (int)Math.Pow(2, profundidade);
+    private static int CalcularHash(int chave, int profundidade)
+    {
+        var mod = (int)Math.Pow(2, profundidade);
+        return ((chave % mod) + mod) % mod;
+    }
 
     private static int CalcularHash(string chave, int profundidade)
     {
