@@ -13,6 +13,14 @@ app.Configure(config =>
         .AddCommand<AdicionarElementoCommand>("adicionar")
         .WithDescription("Adiciona um elemento a uma tabela hash extensível existente.")
         .WithExample(["adicionar", "-a", "minha_hash_table.json", "-c", "chave1", "-e", "elemento1"]);
+    config
+        .AddCommand<GerarArquivoDotCommand>("gerar-dot")
+        .WithDescription("Gera um arquivo DOT a partir de um arquivo JSON representando uma tabela hash extensível.")
+        .WithExample(["gerar-dot", "-a", "minha_hash_table.json", "-o", "minha_hash_table.dot"]);
+    config
+        .AddCommand<GerarSvgCommand>("gerar-svg")
+        .WithDescription("Gera um arquivo SVG a partir de um arquivo DOT representando uma tabela hash extensível.")
+        .WithExample(["gerar-svg", "-a", "minha_hash_table.json", "-o", "minha_hash_table.svg"]);
 });
 return app.Run(args);
 

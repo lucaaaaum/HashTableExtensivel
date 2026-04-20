@@ -21,4 +21,12 @@ public class TabelaDesconstruída
             Elementos = [.. itens.Select(item => item!.Value.elemento?.ToString() ?? string.Empty)]
         };
     }
+
+    public HashTable<string, string> Converter()
+    {
+        var tabela = new HashTable<string, string>(TamanhoDoBucket);
+        for (int i = 0; i < Chaves.Length; i++)
+            tabela.Inserir(Chaves[i], Elementos[i]);
+        return tabela;
+    }
 }
