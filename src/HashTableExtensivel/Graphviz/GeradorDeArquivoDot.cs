@@ -5,7 +5,7 @@ namespace HashTableExtensivel.Graphviz;
 
 public static class GeradorDeArquivoDot
 {
-    public static void GerarArquivoDot<TElemento>(this HashTable<TElemento> hashTable, string caminhoDoArquivo)
+    public static string GerarArquivoDot<TElemento>(this HashTable<TElemento> hashTable)
         where TElemento : IChaveável
     {
         var diretório = hashTable.ObterDiretório();
@@ -56,6 +56,6 @@ public static class GeradorDeArquivoDot
 
         stringBuilder.AppendLine("}");
 
-        File.WriteAllText(caminhoDoArquivo, stringBuilder.ToString());
+        return stringBuilder.ToString();
     }
 }
