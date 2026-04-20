@@ -3,31 +3,30 @@ using System.Text.Json.Serialization;
 
 namespace HashTableExtensivel.EstruturasDeDados;
 
-public class HashTable<TElemento> where TElemento : IChaveável
+public class HashTable<TChave, TElemento>
 {
     public int TamanhoDoBucket { get; init; }
     public int Profundidade { get; private set; }
     [JsonInclude]
-    private Bucket<TElemento>[] Diretório { get; set; }
+    private Bucket<TChave, TElemento>[] Diretório { get; set; }
 
     public HashTable(int tamanhoDoBucket)
     {
         TamanhoDoBucket = tamanhoDoBucket;
         Profundidade = 0;
-        Diretório = new Bucket<TElemento>[1];
-        Diretório[0] = new Bucket<TElemento>(Profundidade, TamanhoDoBucket);
+        Diretório = new Bucket<TChave, TElemento>[1];
+        Diretório[0] = new Bucket<TChave, TElemento>(Profundidade, TamanhoDoBucket);
     }
 
-    public void Inserir(TElemento elemento)
+    public void Inserir(TChave chave, TElemento elemento)
     {
-        var chave = elemento.ObterChave();
         var hash = chave.CalcularHash(Profundidade);
 
         var bucket = Diretório[hash];
 
         if (!bucket.Cheio)
         {
-            bucket.Inserir(elemento);
+            bucket.Inserir(chave, elemento);
             return;
         }
 
@@ -42,7 +41,7 @@ public class HashTable<TElemento> where TElemento : IChaveável
             Profundidade++;
             var novoBucket = bucket.Dividir();
             var tamanhoDoNovoDiretório = (int)Math.Pow(2, Profundidade);
-            var novoDiretório = new Bucket<TElemento>[tamanhoDoNovoDiretório];
+            var novoDiretório = new Bucket<TChave, TElemento>[tamanhoDoNovoDiretório];
 
             for (int i = 0; i < tamanhoDoDiretórioAtual; i++)
             {
@@ -54,7 +53,7 @@ public class HashTable<TElemento> where TElemento : IChaveável
             Diretório[hash + tamanhoDoDiretórioAtual] = novoBucket;
         }
 
-        Inserir(elemento);
+        Inserir(chave, elemento);
     }
 
     public TElemento? Buscar(int chave)
@@ -81,7 +80,7 @@ public class HashTable<TElemento> where TElemento : IChaveável
         {
             Profundidade--;
             var tamanhoDoNovoDiretório = (int)Math.Pow(2, Profundidade);
-            var novoDiretório = new Bucket<TElemento>[tamanhoDoNovoDiretório];
+            var novoDiretório = new Bucket<TChave, TElemento>[tamanhoDoNovoDiretório];
             Array.Copy(Diretório, novoDiretório, tamanhoDoNovoDiretório);
             Diretório = novoDiretório;
         }
@@ -93,5 +92,5 @@ public class HashTable<TElemento> where TElemento : IChaveável
         Console.WriteLine(json);
     }
 
-    public Bucket<TElemento>[] ObterDiretório() => Diretório;
+    public Bucket<TChave, TElemento>[] ObterDiretório() => Diretório;
 }
