@@ -8,6 +8,7 @@ public class Bucket<TElemento>(int profundidade, int tamanho)
     public Guid Id { get; init; } = Guid.NewGuid();
     public int Profundidade { get; private set; } = profundidade;
     public bool Cheio => Elementos.All(elemento => elemento is not null);
+    public bool Vazio => Elementos.All(elemento => elemento is null);
     [JsonInclude]
     private TElemento?[] Elementos { get; init; } = new TElemento[tamanho];
     private int Tamanho { get; init; } = tamanho;

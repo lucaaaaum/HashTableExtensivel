@@ -69,6 +69,21 @@ public class HashTable<TElemento> where TElemento : IChaveável
         var hash = chave.CalcularHash(Profundidade);
         var bucket = Diretório[hash];
         bucket.Remover(chave);
+
+        if (bucket.Vazio)
+        {
+            var outroBucket = Diretório[chave.CalcularHash(Profundidade - 1)];
+            Diretório[hash] = outroBucket;
+        }
+
+        if (Diretório.All(b => b.Profundidade < Profundidade))
+        {
+            Profundidade--;
+            var tamanhoDoNovoDiretório = (int)Math.Pow(2, Profundidade);
+            var novoDiretório = new Bucket<TElemento>[tamanhoDoNovoDiretório];
+            Array.Copy(Diretório, novoDiretório, tamanhoDoNovoDiretório);
+            Diretório = novoDiretório;
+        }
     }
 
     public void Imprimir()
