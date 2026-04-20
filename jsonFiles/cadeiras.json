@@ -1,0 +1,13 @@
+{
+  "TamanhoDoBucket": 2,
+  "Chaves": [
+    "1",
+    "3",
+    "2"
+  ],
+  "Elementos": [
+    "Algoritmos e Programação: Estruturas Avançadas de Dados",
+    "Engenharia de Software: Arquitetura e Padrões",
+    "Sistemas de Gerenciamento de Bancos de Dados"
+  ]
+}
