@@ -5,8 +5,7 @@ namespace HashTableExtensivel.Graphviz;
 
 public static class GeradorDeArquivoDot
 {
-    public static void GerarArquivoDot<TElemento>(this HashTable<TElemento> hashTable, string caminhoDoArquivo)
-        where TElemento : IChaveável
+    public static string GerarArquivoDot(this HashTable<string, string> hashTable)
     {
         var diretório = hashTable.ObterDiretório();
         var stringBuilder = new StringBuilder();
@@ -34,12 +33,13 @@ public static class GeradorDeArquivoDot
             stringBuilder.AppendLine("        <TABLE BORDER=\"1\" CELLBORDER=\"1\" CELLSPACING=\"0\">");
             stringBuilder.AppendLine($"            <TR><TD COLSPAN=\"2\">Bucket {id}: Profundidade = {bucket.Profundidade}</TD></TR>");
             stringBuilder.AppendLine("            <TR><TD>Chave</TD><TD>Elemento</TD></TR>");
-            foreach (var elemento in bucket.ObterElementos())
+            var chavesEElementos = bucket.ObterChavesEElementos().ToList();
+            foreach (var chaveEElemento in chavesEElementos) 
             {
-                if (elemento is null)
+                if (chaveEElemento is null)
                     stringBuilder.AppendLine("            <TR><TD></TD><TD></TD></TR>");
                 else
-                    stringBuilder.AppendLine($"            <TR><TD>{elemento.ObterChave()}</TD><TD>{elemento}</TD></TR>");
+                    stringBuilder.AppendLine($"            <TR><TD>{chaveEElemento.Value.chave}</TD><TD>{chaveEElemento.Value.elemento}</TD></TR>");
             }
             stringBuilder.AppendLine("        </TABLE>");
             stringBuilder.AppendLine("    >];");
@@ -56,6 +56,6 @@ public static class GeradorDeArquivoDot
 
         stringBuilder.AppendLine("}");
 
-        File.WriteAllText(caminhoDoArquivo, stringBuilder.ToString());
+        return stringBuilder.ToString();
     }
 }

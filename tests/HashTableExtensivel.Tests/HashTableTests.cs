@@ -8,7 +8,7 @@ public class HashTableTests
     [Test]
     public void HashTable_DeveAdicionarValores()
     {
-        var hashTable = new HashTable<Fruta>(2);
+        var hashTable = new HashTable<int, Fruta>(2);
         var frutas = new List<Fruta>
         {
             new("Banana"),
@@ -17,7 +17,7 @@ public class HashTableTests
             new("Uva")
         };
         foreach (var fruta in frutas)
-            hashTable.Inserir(fruta);
+            hashTable.Inserir(fruta.Id, fruta);
 
         foreach (var fruta in frutas)
         {
@@ -31,7 +31,7 @@ public class HashTableTests
     [Test]
     public void HashTable_DeveAumentarProfundidadeAoAdicionarMuitosValores()
     {
-        var hashTable = new HashTable<Fruta>(2);
+        var hashTable = new HashTable<int, Fruta>(2);
         var frutas = new List<Fruta>
         {
             new("Banana"),
@@ -44,7 +44,7 @@ public class HashTableTests
             new("Melancia")
         };
         foreach (var fruta in frutas)
-            hashTable.Inserir(fruta);
+            hashTable.Inserir(fruta.Id, fruta);
 
         Assert.That(hashTable.Profundidade, Is.EqualTo(2), "A profundidade da hash table deveria ter aumentado após inserir muitos valores.");
     }
@@ -52,7 +52,7 @@ public class HashTableTests
     [Test]
     public void HashTable_DeveRemoverValores()
     {
-        var hashTable = new HashTable<Fruta>(2);
+        var hashTable = new HashTable<int, Fruta>(2);
         var frutas = new List<Fruta>
         {
             new("Banana"),
@@ -65,7 +65,7 @@ public class HashTableTests
             new("Melancia")
         };
         foreach (var fruta in frutas)
-            hashTable.Inserir(fruta);
+            hashTable.Inserir(fruta.Id, fruta);
 
         var profundidadeAntesDaRemoção = hashTable.Profundidade;
         Assert.That(profundidadeAntesDaRemoção, Is.EqualTo(2), "A profundidade da hash table deveria ter aumentado após inserir muitos valores.");

@@ -2,50 +2,49 @@ using System.Text.Json.Serialization;
 
 namespace HashTableExtensivel.EstruturasDeDados;
 
-public class Bucket<TElemento>(int profundidade, int tamanho)
-    where TElemento : IChaveável
+public class Bucket<TChave, TElemento>(int profundidade, int tamanho)
 {
     public Guid Id { get; init; } = Guid.NewGuid();
     public int Profundidade { get; private set; } = profundidade;
     public bool Cheio => Elementos.All(elemento => elemento is not null);
     public bool Vazio => Elementos.All(elemento => elemento is null);
     [JsonInclude]
-    private TElemento?[] Elementos { get; init; } = new TElemento[tamanho];
+    private (TChave chave, TElemento elemento)?[] Elementos { get; init; } = new (TChave, TElemento)?[tamanho];
     private int Tamanho { get; init; } = tamanho;
 
-    public void Inserir(TElemento elemento)
+    public void Inserir(TChave chave, TElemento elemento)
     {
         for (int i = 0; i < Tamanho; i++)
             if (Elementos[i] is null)
             {
-                Elementos[i] = elemento;
+                Elementos[i] = (chave, elemento);
                 return;
             }
-            else if (Elementos[i]!.ObterChave() == elemento.ObterChave())
+            else if (Elementos[i]!.Value.chave!.Equals(chave))
                 throw new InvalidOperationException("Não é possível inserir um elemento com chave duplicada.");
 
         throw new InvalidOperationException("Não foi possível inserir o elemento no bucket.");
     }
 
-    public TElemento? Buscar(int chave)
+    public TElemento? Buscar(TChave chave)
     {
         foreach (var elemento in Elementos)
         {
             if (elemento is null)
                 continue;
-            if (elemento.ObterChave() == chave)
-                return elemento;
+            if (elemento!.Value.chave!.Equals(chave))
+                return elemento!.Value.elemento;
         }
         return default;
     }
 
-    public void Remover(int chave)
+    public void Remover(TChave chave)
     {
         for (int i = 0; i < Tamanho; i++)
         {
             if (Elementos[i] is null)
                 continue;
-            if (Elementos[i]!.ObterChave() == chave)
+            if (Elementos[i]!.Value.chave!.Equals(chave))
             {
                 Elementos[i] = default;
                 return;
@@ -63,23 +62,22 @@ public class Bucket<TElemento>(int profundidade, int tamanho)
         Profundidade--;
     }
 
-    public Bucket<TElemento> Dividir()
+    public Bucket<TChave, TElemento> Dividir()
     {
         if (!Cheio)
             throw new InvalidOperationException("Não é possível dividir um bucket que não está cheio.");
 
         Profundidade++;
 
-        var novoBucket = new Bucket<TElemento>(Profundidade, Tamanho);
+        var novoBucket = new Bucket<TChave, TElemento>(Profundidade, Tamanho);
         for (int i = 0; i < Tamanho; i++)
         {
-            var elemento = Elementos[i]!;
-            var chave = elemento.ObterChave();
+            var (chave, elemento) = Elementos[i]!.Value;
             var hashAtual = chave.CalcularHash(Profundidade - 1);
             var hashNovo = chave.CalcularHash(Profundidade);
             if (hashAtual == hashNovo)
                 continue;
-            novoBucket.Inserir(elemento);
+            novoBucket.Inserir(chave, elemento);
             Elementos[i] = default;
         }
 
@@ -101,5 +99,7 @@ public class Bucket<TElemento>(int profundidade, int tamanho)
         return novoBucket;
     }
 
-    public TElemento?[] ObterElementos() => Elementos;
+    public (TChave chave, TElemento elemento)?[] ObterChavesEElementos() => [.. Elementos];
+
+    public TElemento?[] ObterElementos() => [.. Elementos.Select(e => e!.Value.elemento)];
 }
