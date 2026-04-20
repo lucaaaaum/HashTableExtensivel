@@ -1,0 +1,92 @@
+digraph HashTable {
+    node [shape=plaintext];
+    rankdir=LR;
+
+    diretorio [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="1">Profundidade: 4</TD></TR>
+            <TR><TD PORT="diretorio0">0000</TD></TR>
+            <TR><TD PORT="diretorio1">0001</TD></TR>
+            <TR><TD PORT="diretorio2">0010</TD></TR>
+            <TR><TD PORT="diretorio3">0011</TD></TR>
+            <TR><TD PORT="diretorio4">0100</TD></TR>
+            <TR><TD PORT="diretorio5">0101</TD></TR>
+            <TR><TD PORT="diretorio6">0110</TD></TR>
+            <TR><TD PORT="diretorio7">0111</TD></TR>
+            <TR><TD PORT="diretorio8">1000</TD></TR>
+            <TR><TD PORT="diretorio9">1001</TD></TR>
+            <TR><TD PORT="diretorio10">1010</TD></TR>
+            <TR><TD PORT="diretorio11">1011</TD></TR>
+            <TR><TD PORT="diretorio12">1100</TD></TR>
+            <TR><TD PORT="diretorio13">1101</TD></TR>
+            <TR><TD PORT="diretorio14">1110</TD></TR>
+            <TR><TD PORT="diretorio15">1111</TD></TR>
+       </TABLE>
+    >];
+
+    bucket0 [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2">Bucket 0: Profundidade = 3</TD></TR>
+            <TR><TD>Chave</TD><TD>Elemento</TD></TR>
+            <TR><TD></TD><TD></TD></TR>
+            <TR><TD>8</TD><TD>Pessoa</TD></TR>
+        </TABLE>
+    >];
+    bucket1 [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2">Bucket 1: Profundidade = 2</TD></TR>
+            <TR><TD>Chave</TD><TD>Elemento</TD></TR>
+            <TR><TD>5</TD><TD>Pessoa</TD></TR>
+            <TR><TD>9</TD><TD>Pessoa</TD></TR>
+        </TABLE>
+    >];
+    bucket2 [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2">Bucket 2: Profundidade = 3</TD></TR>
+            <TR><TD>Chave</TD><TD>Elemento</TD></TR>
+            <TR><TD>7</TD><TD>Pessoa</TD></TR>
+            <TR><TD></TD><TD></TD></TR>
+        </TABLE>
+    >];
+    bucket3 [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2">Bucket 3: Profundidade = 2</TD></TR>
+            <TR><TD>Chave</TD><TD>Elemento</TD></TR>
+            <TR><TD>2</TD><TD>Pessoa</TD></TR>
+            <TR><TD>6</TD><TD>Pessoa</TD></TR>
+        </TABLE>
+    >];
+    bucket4 [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2">Bucket 4: Profundidade = 3</TD></TR>
+            <TR><TD>Chave</TD><TD>Elemento</TD></TR>
+            <TR><TD>4</TD><TD>Pessoa</TD></TR>
+            <TR><TD>10</TD><TD>Pessoa</TD></TR>
+        </TABLE>
+    >];
+    bucket5 [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2">Bucket 5: Profundidade = 3</TD></TR>
+            <TR><TD>Chave</TD><TD>Elemento</TD></TR>
+            <TR><TD>1</TD><TD>Pessoa</TD></TR>
+            <TR><TD>3</TD><TD>Pessoa</TD></TR>
+        </TABLE>
+    >];
+
+    diretorio:diretorio0 -> bucket0
+    diretorio:diretorio1 -> bucket1
+    diretorio:diretorio2 -> bucket0
+    diretorio:diretorio3 -> bucket2
+    diretorio:diretorio4 -> bucket0
+    diretorio:diretorio5 -> bucket1
+    diretorio:diretorio6 -> bucket3
+    diretorio:diretorio7 -> bucket2
+    diretorio:diretorio8 -> bucket0
+    diretorio:diretorio9 -> bucket1
+    diretorio:diretorio10 -> bucket4
+    diretorio:diretorio11 -> bucket2
+    diretorio:diretorio12 -> bucket0
+    diretorio:diretorio13 -> bucket1
+    diretorio:diretorio14 -> bucket3
+    diretorio:diretorio15 -> bucket5
+}

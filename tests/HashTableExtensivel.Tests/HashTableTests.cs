@@ -17,22 +17,15 @@ public class HashTableTests
             new("Uva")
         };
         foreach (var fruta in frutas)
-        {
-            Console.WriteLine($"Inserindo fruta {fruta.Nome}...");
             hashTable.Inserir(fruta);
-            hashTable.Imprimir();
-        }
 
         foreach (var fruta in frutas)
         {
-            Console.WriteLine($"Buscando fruta {fruta.Nome}...");
             var chave = fruta.ObterChave();
             var frutaEncontrada = hashTable.Buscar(chave);
-            Assert.That(frutaEncontrada, Is.Not.Null);
-            Assert.That(frutaEncontrada!.Nome, Is.EqualTo(fruta.Nome));
+            Assert.That(frutaEncontrada, Is.Not.Null, $"Fruta '{fruta}' não encontrada na hash table.");
+            Assert.That(frutaEncontrada!.Nome, Is.EqualTo(fruta.Nome), $"Fruta encontrada tem nome '{frutaEncontrada.Nome}', esperado '{fruta.Nome}'.");
         }
-
-        Assert.Fail();
     }
 }
 
