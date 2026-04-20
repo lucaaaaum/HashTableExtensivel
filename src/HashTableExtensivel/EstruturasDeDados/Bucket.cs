@@ -48,11 +48,19 @@ public class Bucket<TElemento>(int profundidade, int tamanho)
             if (Elementos[i]!.ObterChave() == chave)
             {
                 Elementos[i] = default;
-                break;
+                return;
             }
         }
 
         throw new InvalidOperationException("Elemento não encontrado para remoção.");
+    }
+
+    public void ReduzirProfundidade()
+    {
+        if (Profundidade == 0)
+            throw new InvalidOperationException("Não é possível reduzir a profundidade de um bucket com profundidade zero.");
+
+        Profundidade--;
     }
 
     public Bucket<TElemento> Dividir()

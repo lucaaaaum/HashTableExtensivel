@@ -70,13 +70,14 @@ public class HashTable<TElemento> where TElemento : IChaveável
         var bucket = Diretório[hash];
         bucket.Remover(chave);
 
-        if (bucket.Vazio)
+        if (bucket.Vazio && Profundidade > 0)
         {
             var outroBucket = Diretório[chave.CalcularHash(Profundidade - 1)];
             Diretório[hash] = outroBucket;
+            outroBucket.ReduzirProfundidade();
         }
 
-        if (Diretório.All(b => b.Profundidade < Profundidade))
+        if (Diretório.Distinct().All(b => b.Profundidade < Profundidade))
         {
             Profundidade--;
             var tamanhoDoNovoDiretório = (int)Math.Pow(2, Profundidade);
