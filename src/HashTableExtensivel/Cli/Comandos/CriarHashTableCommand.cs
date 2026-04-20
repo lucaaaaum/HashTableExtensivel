@@ -30,6 +30,12 @@ public class CriarHashTableCommand : Command<CriarHashTableSettings>
             return 1;
         }
 
+        if (settings.TamanhoDoBucket == 1)
+        {
+            Console.WriteLine("O tamanho do bucket deve ser maior que 1 para evitar colisões frequentes.");
+            return 1;
+        }
+
         var arquivo = Path.ChangeExtension(settings.Arquivo, "json") ?? $"hash_table.json";
 
         var hashTableString = new HashTable<string, string>(settings.TamanhoDoBucket);
