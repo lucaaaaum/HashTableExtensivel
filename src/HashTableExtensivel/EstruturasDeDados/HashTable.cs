@@ -56,14 +56,14 @@ public class HashTable<TChave, TElemento>
         Inserir(chave, elemento);
     }
 
-    public TElemento? Buscar(int chave)
+    public TElemento? Buscar(TChave chave)
     {
         var hash = chave.CalcularHash(Profundidade);
         var bucket = Diretório[hash];
         return bucket.Buscar(chave);
     }
 
-    public void Remover(int chave)
+    public void Remover(TChave chave)
     {
         var hash = chave.CalcularHash(Profundidade);
         var bucket = Diretório[hash];

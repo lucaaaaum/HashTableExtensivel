@@ -26,7 +26,7 @@ public class Bucket<TChave, TElemento>(int profundidade, int tamanho)
         throw new InvalidOperationException("Não foi possível inserir o elemento no bucket.");
     }
 
-    public TElemento? Buscar(int chave)
+    public TElemento? Buscar(TChave chave)
     {
         foreach (var elemento in Elementos)
         {
@@ -38,7 +38,7 @@ public class Bucket<TChave, TElemento>(int profundidade, int tamanho)
         return default;
     }
 
-    public void Remover(int chave)
+    public void Remover(TChave chave)
     {
         for (int i = 0; i < Tamanho; i++)
         {

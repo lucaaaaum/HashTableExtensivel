@@ -21,6 +21,10 @@ app.Configure(config =>
         .AddCommand<GerarSvgCommand>("gerar-svg")
         .WithDescription("Gera um arquivo SVG a partir de um arquivo DOT representando uma tabela hash extensível.")
         .WithExample(["gerar-svg", "-a", "minha_hash_table.json", "-o", "minha_hash_table.svg"]);
+    config
+        .AddCommand<RemoverElementoCommand>("remover")
+        .WithDescription("Remove um elemento de uma tabela hash extensível existente.")
+        .WithExample(["remover", "-a", "minha_hash_table.json", "-c", "chave1"]);
 });
 return app.Run(args);
 
