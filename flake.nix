@@ -26,6 +26,7 @@
             buildInputs = with pkgs; [
               dotnet-sdk_10
               rosetta.packages.${system}.default
+              graphviz
             ];
           };
         };

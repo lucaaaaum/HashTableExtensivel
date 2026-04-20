@@ -1,0 +1,44 @@
+digraph HashTable {
+    node [shape=plaintext];
+    rankdir=LR;
+
+    diretorio [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="1">Profundidade: 2</TD></TR>
+            <TR><TD PORT="diretorio0">00</TD></TR>
+            <TR><TD PORT="diretorio1">01</TD></TR>
+            <TR><TD PORT="diretorio2">10</TD></TR>
+            <TR><TD PORT="diretorio3">11</TD></TR>
+       </TABLE>
+    >];
+
+    bucket0 [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2">Bucket 0: Profundidade = 1</TD></TR>
+            <TR><TD>Chave</TD><TD>Elemento</TD></TR>
+            <TR><TD>2</TD><TD>Pessoa</TD></TR>
+            <TR><TD>4</TD><TD>Pessoa</TD></TR>
+        </TABLE>
+    >];
+    bucket1 [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2">Bucket 1: Profundidade = 2</TD></TR>
+            <TR><TD>Chave</TD><TD>Elemento</TD></TR>
+            <TR><TD>1</TD><TD>Pessoa</TD></TR>
+            <TR><TD>5</TD><TD>Pessoa</TD></TR>
+        </TABLE>
+    >];
+    bucket2 [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2">Bucket 2: Profundidade = 2</TD></TR>
+            <TR><TD>Chave</TD><TD>Elemento</TD></TR>
+            <TR><TD>3</TD><TD>Pessoa</TD></TR>
+            <TR><TD></TD><TD></TD></TR>
+        </TABLE>
+    >];
+
+    diretorio:diretorio0 -> bucket0
+    diretorio:diretorio1 -> bucket1
+    diretorio:diretorio2 -> bucket0
+    diretorio:diretorio3 -> bucket2
+}
