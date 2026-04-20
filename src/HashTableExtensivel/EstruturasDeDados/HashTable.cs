@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -21,57 +20,47 @@ public class HashTable<TElemento> where TElemento : IChaveável
 
     public void Inserir(TElemento elemento)
     {
-        try
+        var chave = elemento.ObterChave();
+        var hash = chave.CalcularHash(Profundidade);
+
+        var bucket = Diretório[hash];
+
+        if (!bucket.Cheio)
         {
-            var chave = elemento.ObterChave();
-            Console.WriteLine($"Inserindo elemento com chave {chave}");
-            var hash = chave.CalcularHash(Profundidade);
-            Console.WriteLine($"Hash calculado para a chave {chave} é {hash}");
-
-            var bucket = Diretório[hash];
-
-            if (!bucket.Cheio)
-            {
-                bucket.Inserir(elemento);
-                return;
-            }
-
-            if (bucket.Profundidade < Profundidade)
-            {
-                var novoBucket = bucket.Dividir();
-                Diretório[hash] = novoBucket;
-            }
-            else if (bucket.Profundidade == Profundidade)
-            {
-                var tamanhoDoDiretórioAtual = Diretório.Length;
-                Profundidade++;
-                var novoBucket = bucket.Dividir();
-                var tamanhoDoNovoDiretório = (int)Math.Pow(2, Profundidade);
-                var novoDiretório = new Bucket<TElemento>[tamanhoDoNovoDiretório];
-
-                for (int i = 0; i < tamanhoDoDiretórioAtual; i++)
-                {
-                    novoDiretório[i] = Diretório[i];
-                    novoDiretório[i + tamanhoDoDiretórioAtual] = Diretório[i];
-                }
-
-                Diretório = novoDiretório;
-                Diretório[hash + tamanhoDoDiretórioAtual] = novoBucket;
-            }
-
-            Inserir(elemento);
+            bucket.Inserir(elemento);
+            return;
         }
-        finally
+
+        if (bucket.Profundidade < Profundidade)
         {
-            Imprimir();
+            var novoBucket = bucket.Dividir();
+            Diretório[hash] = novoBucket;
         }
+        else if (bucket.Profundidade == Profundidade)
+        {
+            var tamanhoDoDiretórioAtual = Diretório.Length;
+            Profundidade++;
+            var novoBucket = bucket.Dividir();
+            var tamanhoDoNovoDiretório = (int)Math.Pow(2, Profundidade);
+            var novoDiretório = new Bucket<TElemento>[tamanhoDoNovoDiretório];
+
+            for (int i = 0; i < tamanhoDoDiretórioAtual; i++)
+            {
+                novoDiretório[i] = Diretório[i];
+                novoDiretório[i + tamanhoDoDiretórioAtual] = Diretório[i];
+            }
+
+            Diretório = novoDiretório;
+            Diretório[hash + tamanhoDoDiretórioAtual] = novoBucket;
+        }
+
+        Inserir(elemento);
     }
 
     public TElemento? Buscar(int chave)
     {
         var hash = chave.CalcularHash(Profundidade);
         var bucket = Diretório[hash];
-        Console.WriteLine($"Buscando elemento com chave {chave} no bucket {hash}");
         return bucket.Buscar(chave);
     }
 
