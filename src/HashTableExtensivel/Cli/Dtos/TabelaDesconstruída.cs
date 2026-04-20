@@ -13,6 +13,7 @@ public class TabelaDesconstruída
         var itens = tabela
             .ObterDiretório()
             .SelectMany(bucket => bucket.ObterChavesEElementos().Where(item => item is not null))
+            .Distinct()
             .ToList();
         return new TabelaDesconstruída
         {
